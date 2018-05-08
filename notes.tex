@@ -28,4 +28,101 @@
         \item \textbf{Email:} wgolab@uwaterloo.ca
       \end{itemize}
 
+  \section{Introduction}
+    \subsection{What is a Distributed System?}
+      A distributed system is a collection of autonomous computing elements that appear to its users to be a single coherent system.
+
+    \subsection{Rationale Behind Distributed Systems}
+      \begin{itemize}
+        \item Resource sharing
+        \item Integrating multiple systems
+        \item Centralized systems may not be as effective as many smaller systems working together
+        \item Users themselves may be mobile and distributed physically from one another
+      \end{itemize}
+
+    \subsection{Middleware}
+      Middleware is a layer of software that separates applications from their underlying platform. Middleware is often used by distributed
+      systems to support heterogeneous computers and networks while offering a single-system view. Common middleware services include:
+      \begin{itemize}
+        \item Communication (e.g. add job to remote queue)
+        \item Transactions (e.g. access multiple independent services atomically)
+        \item Service composition (e.g. Independent map system enhanced with independent weather forecast system)
+        \item Reliability (e.g. replicated state machine)
+      \end{itemize}
+
+    \subsection{Goals of Distributed Systems}
+      \subsubsection{Supporting Resource Sharing}
+        Resources can include:
+        \begin{itemize}
+          \item Peripheral devices (e.g. printers, video cameras)
+          \item Storage facilities (e.g. file servers)
+          \item Enterprise data (e.g. payroll)
+          \item Web page (e.g. Web search)
+          \item CPUs (e.g. Supercomputers)
+        \end{itemize}
+
+      \subsubsection{Making distribution transparent}
+        Distribution transparency attempts to hide that processes and resources are physically distributed. Types of transparency include:
+        \begin{itemize}
+          \item \textbf{Access:} Hide differences in data representation and how data is accessed
+          \item \textbf{Location:} Hide where resource is located
+          \item \textbf{Migration:} Hide that a resource may move to another location
+          \item \textbf{Relocation:} Hide that a resource may move to another location while in use
+          \item \textbf{Replication:} Hide that a resource is replicated
+          \item \textbf{Concurrency:} Hide that a resource may be shared by users competing for that resource
+          \item \textbf{Failure:} Hide the failure and recovery of a resource
+        \end{itemize}
+
+      \subsubsection{Being Open}
+        An open distributed system offers components that can be easily used by or integrated into other systems. Key properties of openness
+        include:
+        \begin{itemize}
+          \item Interoperability
+          \item Composability
+          \item Extensibility
+          \item Separation of policy from mechanism
+        \end{itemize}
+
+      \subsubsection{Being Scalable}
+        Scalability covers a system's ability to expand along three axes:
+        \begin{itemize}
+          \item Size (e.g. adding users and resources)
+          \item Geography (e.g. users across large distances)
+          \item Administration (e.g. multiple independent admins)
+        \end{itemize}
+        Centralized systems tend to have limited scalability.
+
+        A few common scaling techniques include:
+        \begin{itemize}
+          \item Hiding communication latencies (i.e. trying to avoid waiting for responses from remote-server machines)
+          \item Partitioning (i.e. Taking a component, splitting it into smaller parts, and spreading those parts across the system)
+          \item Replication (i.e. Adding multiple copies of a component to increase availability, balance load, support caching, etc.)
+        \end{itemize}
+
+      \subsection{Common Fallacies of Distributed Computing}
+        The following are common beginner assumptions that can lead to major trouble:
+        \begin{itemize}
+          \item The network is reliable
+          \item The network is secure
+          \item The network is homogeneous
+          \item The network topology is static
+          \item Latency is 0
+          \item Bandwidth is unlimited
+          \item Transport cost is 0
+          \item There is one administrator
+        \end{itemize}
+
+      \subsection{Types of Distributed Systems}
+        \begin{itemize}
+          \item \textbf{Web sites and Web services}
+          \item \textbf{High performance computing (HPC):} High-performance computing in distributed memory settings, where message communication is used instead of shared memory.
+          \item \textbf{Clustered Computing:} Distributing CPU or I/O intensive tasks over multiple servers.
+          \item \textbf{Cloud and Grid Computing:} Grid computing focuses on combining resources from different institutions, while cloud computing provides access to shared pools
+          of configurable system resources.
+          \item \textbf{Transaction Processing:} Distributed transactions coordinated by transaction processing (TP) monitor.
+          \item \textbf{Enterprise Application Integration (EAI):} Middleware often used as communication facilitator in such systems.
+          \item \textbf{Sensor Networks:} Each sensor in a network can process and store data, which can be queries by some operator. Sensors often rely on in-network data
+          processing to reduce communication costs.
+        \end{itemize}
+
 \end{document}
