@@ -125,4 +125,39 @@
           processing to reduce communication costs.
         \end{itemize}
 
+  \section{Architectures}
+    \subsection{Definitions}
+      \begin{itemize}
+        \item \textbf{Component:} A modular unit with a well-defined interface
+        \item \textbf{Connector:} Mechanism that mediated communication, coordination, or cooperation among components
+        \item \textbf{Software architecture:} Organization of software components
+        \item \textbf{System architecture:} Instantiation of software architecture in which software components are placed on real machines
+        \item \textbf{Autonomic System:} System that adapts to its environment by monitoring its own behavior and reacting accordingly
+      \end{itemize}
+
+    \subsection{Architectural Styles}
+      \subsubsection{Layered}
+        Control flows from layer-to-layer; requests flow down the hierarchy and responses flow up, with each layer only interacting with its two neighboring layers.
+        Layered architectures are often used to support client-server interactions, where a client component requests a service from a server component and waits for
+        a response. Many enterprise systems are organized intro three layers, namely a user interface, application layer, and database. Note that middle layers may
+        act as a client to the layer below and a server to the layer above.
+
+        Vertical distribution describes the logical layers of a system being organized as separate physical tiers.  Horizontal distribution describes a single logical
+        layer being split across multiple machines.
+
+      \subsubsection{Object-Based Architecture}
+        Components are much more loosely organized than in a layered architecture, with components being able to interact freely with one another and no strict concept
+        of layer.
+
+      \subsubsection{Data-Centered Architecture}
+        Components communicate by using a shared data repository, such as a database or file system.
+
+      \subsubsection{Event-Based Architecture}
+        Components communicate by sharing events. Publish/subscribe systems can be used for sharing news, balancing workloads, asynchronous workflows, etc.        
+
+      In practice, many systems are hybrids of the architectures listed above.
+
+    \subsection{Self-Management:}
+      Self-managing systems can be constructed using a feedback loop that monitors system behaviors and adjusts the system's internal operation.
+
 \end{document}
