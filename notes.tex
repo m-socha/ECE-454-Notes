@@ -142,7 +142,7 @@
         a response. Many enterprise systems are organized intro three layers, namely a user interface, application layer, and database. Note that middle layers may
         act as a client to the layer below and a server to the layer above.
 
-        Vertical distribution describes the logical layers of a system being organized as separate physical tiers.  Horizontal distribution describes a single logical
+        Vertical distribution describes the logical layers of a system being organized as separate physical tiers. Horizontal distribution describes a single logical
         layer being split across multiple machines.
 
       \subsubsection{Object-Based Architecture}
@@ -159,5 +159,43 @@
 
     \subsection{Self-Management:}
       Self-managing systems can be constructed using a feedback loop that monitors system behaviors and adjusts the system's internal operation.
+
+  \section{Processes}
+    \subsection{Controlling Processes in Linux}
+      Below are some useful command:
+      \begin{itemize}
+        \item ps - lists running processes
+        \item top - lists processes with top resource usage
+        \item kill / pkill / killall - used to terminate processes
+        \item jobs - lists currently running jobs
+        \item bg - backgrounds a job
+        \item fg - foregrounds a job
+        \item nice / renice - sets priority of processes
+        \item CTRL-C - stops job in terminal
+        \item CTRL-Z - suspends job in terminal (use fg or bg to resume)
+      \end{itemize}
+
+    \subsection{Context Switching During IPC}
+      Inter-process communication can be used to help coordinate processes. However, IPS can be costly, since it requires a context switch from user to
+      kernel space and back.
+
+    \subsection{Threads}
+      Threads execution the same process can communicate through shared memory. Threads are sometimes referred to as lightweight processes (LWPs).
+      Multithreading applications often follow a dispatcher/worker design, where a dispatcher thread received requests and feeds them to a pool
+      of worker threads.
+
+    \subsection{Hardware and Software Interfaces}
+      Processes and threads may interact with underlying hardware either directly through processor instructions or indirectly through library functions
+      operating system calls. The general layers of interaction (from more abstract to less) are applications, libraries, operating system and hardware.
+      These layers may interact with any layer below. Distributed systems often run in virtual environments that manage interactions with lower layers.
+      A major benefit of such virtualization is improved portability. Virtual machine monitors can offer additional benefits, including server consolidation,
+      live migration of VMs to support load balancing and proactive maintenance, and VM replication.
+
+    \subsection{Interfaces in Network Systems}
+      Networked applications communicate by exchanging messages. The format of these messages is determined by a message-passing protocol.
+
+    \subsection{Server Clusters}
+      Servers in a cluster are often organized in three physical tiers. The first is a load balancer, followed by application servers followed by a database
+      or file system.
 
 \end{document}
