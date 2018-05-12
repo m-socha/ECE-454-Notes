@@ -198,4 +198,96 @@
       Servers in a cluster are often organized in three physical tiers. The first is a load balancer, followed by application servers followed by a database
       or file system.
 
+  \section{Communication}
+    \subsection{Access Transparency}
+      Middleware can be used to provide access transparency for a distributed system, meaning that differences in data representation and how data is accessed
+      can be hidden. This is typically done by middleware isolating the application layer from the transport layer.
+
+    \subsection{Remote Procedure Calls (RPCs)}
+      RPCs serve as the equivalent of conventional procedure calls, but for distributed systems. RPCs are implemented using a client-server protocol, where
+      a client interacts with a network using a piece of software known as a client stub, and a server interacts with a network using a server stub. The
+      steps of a typically RPC are detailed below:
+      \begin{enumerate}
+        \item Client process invokes client stub using ordinary procedure call.
+        \item Client stub builds message, passes it to client OS.
+        \item Client OS sends message to server OS.
+        \item Server OS delivers message to server stub.
+        \item Server stub unpacks parameters, invokes appropriate handler in server process.
+        \item Handler processes message, returns result to server OS.
+        \item Server stub packs result into message, passes it to server OS.
+        \item Server OS sends message to client OS.
+        \item Client OS delivers message to client stub.
+        \item Client stub unpacks result, delivers it to client process.
+      \end{enumerate}
+
+      \subsubsection{Representation of Values}
+        Packing parameters into a message is known as parameters marshalling (with unpacking known as demarshalling). Although data representations can be
+        different across multiple machines (e.g. big-endian vs little-endian representation), the purpose of marshalling is to represent data in a
+        machine-independent and network-independent format that all communicating parties expect to receive. The signatures of RPC calls can be defined
+        using what is known as an interface definition language (IDL).
+
+      \subsubsection{Synchronous vs Asynchronous}
+        In a synchronous RPC, the client waits for a return value from the server before resuming execution. In an asynchronous RPC, the client may resume
+        execution as soon as the server acknowledges receipt of the request (client does not need to wait for a return value). A variation of an asynchronous
+        request where a client does not wait to receive any acknowledgment from the server is known as a one-way RPC.
+
+    \subsection{Message Queuing Model} 
+      As an alternative to RPCs, components in a distributed system may also communicate using a message queue that persists messages until they are consumed
+      by a receiver. This technique allows for persistent communication that does not need to be tightly coupled in time. The primitive actions of a simple
+      message queue are:
+      \begin{itemize}
+        \item \textbf{Put:} Append message to queue.
+        \item \textbf{Get:} Block until queue not empty, then remove first message.
+        \item \textbf{Poll:} Check specified queue for messages, remove the first message. Never block.
+        \item \textbf{Notify:} Install handler to be called when message put into queue.
+      \end{itemize}
+
+      A key disadvantage of message queuing is that the delivery of the message ultimately rests with the receiver, and often cannot be guaranteed. Message
+      queuing follows a design similar to publish-subscribe architectures, and is an example of message-oriented middleware (MOM).
+
+    \subsection{Coupling Between Communicating Processes}
+      \subsubsection{Referential Coupling}
+        Referential coupling means that one process has to explicitly reference another one for them to communicate (e.g. connect to web server using IP
+        address and port number).
+      \subsubsection{Temporal Coupling}
+        Temporal coupling means that processes must both be running for them to communicate (e.g. client cannot execute RPC if server is down).
+
+  \section{Apache Thrift}
+    \subsection{Overview}
+      Apache Thrift is an IDL first developed by Facebook, and now managed as an open-source project in the Apache Software Foundation. Thrift provides
+      a software stack and code generation engine to support RPCs between applications written in a wide variety of common languages, including C++, Java,
+      Python, and PHP.
+
+    \subsection{Thrift Software Stack}
+      The elements in the Thrift software stack, from top to bottom, as as follows:
+      \begin{itemize}
+        \item \textbf{Server:} Sets up the lower layers of the stack, and then awaits incoming connections, which it hands off to the processor. Servers
+        can be single or multi-threaded.
+        \item \textbf{Processor:} Handles reading and writing IO streams, and is generated by the Thrift compiler.
+        \item \textbf{Protocol:} Defined mechanism to map in-memory data structures to wire format (e.g. JSON, XML, compact binary)
+        \item \textbf{Transport:} Handles reading to and writing from network (e.g. using HTTP, raw TCP, etc)
+      \end{itemize}
+
+    \subsection{Distribution Transparency}
+      If Thrift clients must know the hostname and port for a given service, location transparency is violated. Also, although IDLs seek to provide access
+      transparency, that too may be violated in certain conditions (e.g. when certain protocol or transport exceptions are thrown).
+
+    \subsection{Application Protocol Versioning}
+      Thrift fields can be modified and remain compatible with old versions, provided that the rules below are followed:
+      \begin{itemize}
+        \item Fields are associated with tag numbers, which should never the changed.
+        \item New fields must be optional and provide default values.
+        \item Fields no longer needed can be removed, but their tag numbers cannot be reused.
+      \end{itemize}
+
+    \subsection{Some Programming Tips}
+      \begin{itemize}
+        \item To separate policy from mechanism, it is generally a bad idea to hardcode hostnames and port numbers; it is usually preferable to accept command line
+        arguments or use a property file.
+        \item Objects built on top of TCP/IP connections (e.g. TSocket, TServerSocket) should be reused if possible to avoid to overhead of establishing and tearing
+        down connections.
+        \item By default Thrift transports, protocols and client stubs are not thread safe; different threads should share these items carefully, or not share them
+        at all.
+      \end{itemize}
+
 \end{document}
