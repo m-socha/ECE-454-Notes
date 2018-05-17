@@ -290,4 +290,42 @@
         at all.
       \end{itemize}
 
+  \section{Distributed File Systems}
+
+    \subsection{Modes of Access}
+      \begin{itemize}
+        \item \textbf{Remote access model:} Client sends requests to access file stored on remote server.
+        \item \textbf{Upload/download model:} File is downloaded from remote server, processes on client, and uploaded back to the server.
+      \end{itemize}
+
+    \subsection{Network File System (NFS)}
+      NFS is a DFS first developed by Sun Microsystems in 1984, and remains heavily used in Unix-like systems. Features include:
+      \begin{itemize}
+        \item Client-side caching to reduce client-server communication
+        \item Delegation of files from a server to a client, where a client can temporarily store and access a file, after which the delegation is recalled and
+        the file returned.
+        \item Compound procedures (e.g. lookup file, open file, and read data all in one call instead of 3). Note that NFS uses RPCs internally.
+        \item Exporting different parts of a file system to different remote servers.
+      \end{itemize}
+
+    \subsection{Google File System (GFS)}
+      GFS is a DFS that stripes files across multiple commodity servers, and is layered on top of ordinary Linux file systems. Although GFS is proprietary, the
+      Hadoop Distributed File System is a simplified open-source implementation of GFS.
+      \begin{itemize}
+        \item \textbf{Synchronization:} A GFS master stores data about files and chunks. This metadata is cached in the main memory of chunk servers, and updates to
+        these chunks servers are written to their own main memory. The master periodically polls the chunk servers to keep this metadata consistent.
+        \item \textbf{Reads:} For reads, a client sends a file name and chunk index to the master, which responds with an address for the server storing that chunk.
+        \item \textbf{Writes:} Updates are written directly to chunk servers, after which the changes are propagated through all primary and then secondary replicas.
+      \end{itemize}
+
+    \subsection{File Sharing Semantics}
+      In centralized file systems, reads and writes are strictly ordered in time. This ensures that an application can always read its own writes. This behavior is
+      often described as UNIX semantics, and can be attained in a DFS so long as there is a single file server and files are not cached.
+
+      When a cached file in a DFS is modified, it is impractical to immediately propagate the changes back to the remote server (this would largely defeat the purpose
+      or caching in the first place). Instead, a widely implemented rule is that changes are only visible to the process or machine that modified a file, and only made
+      visible to other processes or machines when the file is closed. This rule is known as session semantics.
+
+      Semantics of DFS can be defined using combinations of various techniques. For example, NFSv4 supports session semantics and byte range file locking, and HDFS
+      provides immutable files along with an append function (e.g. for storing log data).
 \end{document}
