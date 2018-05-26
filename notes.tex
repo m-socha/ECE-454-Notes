@@ -329,4 +329,51 @@
 
       Semantics of DFS can be defined using combinations of various techniques. For example, NFSv4 supports session semantics and byte range file locking, and HDFS
       provides immutable files along with an append function (e.g. for storing log data).
+
+  \section{Hadoop MapReduce}
+
+    \subsection{Background}
+      MapReduce frameworks address the problem of parallelizing computations on big data sets across many machines. Google did much of the initial work on a generic
+      MapReduce framework intended to phase out the need for special-purpose frameworks for different kinds of computations. Hadoop MapReduce is the most prominent
+      open-source implementation of Google's MapReduce framework, and was created by Yahoo engineers Doug Cutting and Mike Cafarella.
+
+    \subsection{High-level Architecture}
+      Hadoop consists of a MapReduce engine and an HDFS system. The MapReduce layer contains a JobTracker, to which clients can submit MapReduce jobs. This JobTracker
+      pushes work to available TaskTracker nodes, with the goal of picking a node close to the data that job requires.
+
+    \subsection{MapReduce Basics}
+      A few key guiding principles of MapReduce are:
+      \begin{itemize}
+        \item Components do not share data arbitrarily, as the communication overhead for keeping data synchronized across nodes can be very high.
+        \item Data elements are immutable. Computation occurs by generating new outputs, which can then be forwarded into the next computation phase.
+        \item MapReduce transforms lists of input data elements into lists of output data elements. A single MapReduce program typically does so twice, once for the
+        Map phase and once for the Reduce phase.
+      \end{itemize}
+
+      \subsubsection{Mappers}
+        A list of data elements are provided to a mapper one-by-one, which transforms each element to some output element.
+
+      \subsubsection{Reducers}
+        A reducer receives an iterator of input values, and combined these values together to produce a single value.
+
+    \subsection{Technical Definitions}
+      \begin{itemize}
+        \item \textbf{InputSplit:} A unit of work assigned to a single map task.
+        \item \textbf{InputFormat:} Determines how input files are parsed, which also determined the InputSplit.
+        \item \textbf{RecordReader:} Loads data from input split, creating key-value pairs used by the mapper.
+        \item \textbf{Partitioner:} Determines which partition key-values pairs should go to.
+        \item \textbf{OutputFormatter:} Determines how output files are formatted.
+        \item \textbf{RecordWriter:} Writes records to output files.
+      \end{itemize}
+
+    \subsection{Fault Tolerance}
+      The main way Hadoop achieves fault tolerance is by restarting failed tasks. TaskTracker nodes are in constant communication with the JobTracker node, so should
+      a TaskTracker fail to respond in a given period of time, the JobTracker will assume it has crashed. If the job that crashed was in a mapping phase, then other
+      TaskTracker nodes will receive requests to re-run all map tasks previously run by the failed node. If the job that crashed was in a reduce phase, then other
+      TaskTracker nodes will receive requests to re-run all reduce tasks that were in progress on the failed node.
+
+      Such a simple fault tolerance mechanism is possible because mappers and reducers limit their communication with one another and the outside world. A potential
+      drawback with such an approach is that a few slow nodes (called stragglers) can create bottlenecks that hold up the rest of the program. One strategy to remedy
+      this problem is known as speculative execution, where the same task is assigned to multiple nodes to decrease the expected time in which it will be finished.
+
 \end{document}
