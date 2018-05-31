@@ -376,4 +376,31 @@
       drawback with such an approach is that a few slow nodes (called stragglers) can create bottlenecks that hold up the rest of the program. One strategy to remedy
       this problem is known as speculative execution, where the same task is assigned to multiple nodes to decrease the expected time in which it will be finished.
 
+    \subsection{Common Programming Patterns}
+
+      \subsubsection{Counting and Summing}
+        The simplest mapper for a counting problem would output a (key, 1) tuple for an instance of a given key. Alternatively, the mapper can aggregate data for an
+        entire document, or a combiner can be run just after the mapper to aggregate data across documents processes by a map task in a similar way to how a reducer
+        would.
+
+      \subsubsection{Selection}
+        Selection returns a subset of input elements that meet a certain requirement. Selection can be handled entirely in the map task; a reducer need not be
+        specified, in which case one output file will be generated per map task.
+
+      \subsubsection{Projection}
+        Projection returns a subset of fields of each input element (e.g. $a,b,c$ becomes $a,b$). A mapper can handle projection on individual elements, while a
+        reducer is only needed to eliminate duplicates.
+
+      \subsubsection{Index Inversion}
+        Index inversion produces a mapping of terms to document ids. Mappers emit (term, id) tuples, while reducers combine these tuples to generate lists of ids
+        for each term.
+
+      \subsubsection{Cross-Correlation}
+        Cross-correlation problems provide as input a set of tuples of items, and for each possible pair of items, the number of items where the tuples co-occur is
+        measured. If $N$ items are provided, then $N^2$ values should be reported. This problem can be represented through a matrix if $N^2$ is small enough.
+        For larger values of $N^2$, MapReduce can be effective.
+
+        A pairing implementation where mappers return tuples with a pair and a 1 count is simple but often not performant. A ``stripes'' approach where mappers
+        return tuples with an item and a list of items it appears with tends to perform better despite requiring more memory for map-side aggregation.
+
 \end{document}
