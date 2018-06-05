@@ -407,4 +407,32 @@
         A pairing implementation where mappers return tuples with a pair and a 1 count is simple but often not performant. A ``stripes'' approach where mappers
         return tuples with an item and a list of items it appears with tends to perform better despite requiring more memory for map-side aggregation.
 
+  \section{Apache Spark}
+
+    \subsection{Background}
+      Cluster computing frameworks (e.g. Hadoop) allow for large-scale data computations that automatically handle work distribution and fault tolerance. However,
+      many of these frameworks do not leverage distributed memory efficiently, making them ineffective for computations with intermediate results. Apache Spark
+      introduces the concept of resilient distributed datasets (RDDs), which are parallel, fault-tolerant data structures that persist intermediary results in memory.
+
+    \subsection{Lineage}
+      A lineage is a model of the flow of data between RDDs. Spark designs a lineage to perform efficient computations, and also uses the lineage to determine which
+      RDDs to rebuild to recover from failures.
+
+    \subsection{Transformations and Actions}
+      Transformations are data operations that convert an RDD or a pair of RDDs into another RDD. Actions are data operations that convert an RDD into an output. When
+      an action is invoked on an RDD, the Spark scheduler puts together a DAG of transformations.
+
+      \subsubsection{Narrow vs Wide Dependencies}
+        The transformations in the DAG are grouped into stages. A single stage is a collection of transformations with narrow dependencies, meaning that one partition of
+        the output depends only on a single partition of the input (e.g. map, filter). The boundaries between stages feature wide dependencies, meaning that a single
+        partition of output may correspond to multiple partitions of input (e.g. group by key), so the transformations may require a shuffle.
+
+    \subsection{Spark vs Hadoop MapReduce}
+      Two common differences between Spark and MapReduce are:
+      \begin{itemize}
+        \item Spark stores intermediary results in memory, while MapReduce dumps results to HDFS between each job. The MapReduce approach can lead to unnecessary I/O
+          when running multiple jobs in sequence.
+        \item Spark can support some more complicated workflows within a single job rather than running several new ones.
+      \end{itemize}
+
 \end{document}
