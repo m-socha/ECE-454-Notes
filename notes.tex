@@ -405,7 +405,8 @@
         For larger values of $N^2$, MapReduce can be effective.
 
         A pairing implementation where mappers return tuples with a pair and a 1 count is simple but often not performant. A ``stripes'' approach where mappers
-        return tuples with an item and a list of items it appears with tends to perform better despite requiring more memory for map-side aggregation.
+        return tuples with an item and a list of items it appears with tends to perform better despite requiring more memory for map-side aggregation, since there
+        end up being roughly $N$ keys (one for each element) instead of $N^2$ (one for each pair).
 
   \section{Apache Spark}
 
