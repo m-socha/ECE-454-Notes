@@ -436,4 +436,54 @@
         \item Spark can support some more complicated workflows within a single job rather than running several new ones.
       \end{itemize}
 
+  \section{Distributed Graph Processing}
+    Many data sets (e.g. web hyperlinks, social networks, transportation routes) can be modeled using graphs. Computations concerning very large graphs can benefit
+    from distributed architectures. However, previously examined cluster computing frameworks (e.g. Hadoop MapReduce, Apache Spark) are typically not good fits for
+    graph processing, which motivates the creation of separate distributed graph processing frameworks.
+
+    \subsection{Google's Solution: Pregel}
+      Pregel is a proprietary framework developed by Google to perform computations on large distributed graphs with performance and ease of programming in mind.
+      A master/worker model similar to those of MapReduce and Spark is used, where each worker is responsible for a particular vertex partition. The framework
+      maintains some state information for each vertex, including:
+      \begin{itemize}
+        \item Problem-specific values
+        \item List of messages sent to vertex
+        \item List of outgoing edges from a vertex
+        \item A binary active/inactive state
+      \end{itemize}
+
+      \subsubsection{Supersteps}
+        Pregel applies a bulk synchronous parallel (BSP) model of computation that where a computation is divided into iterative rounds called supersteps. Workers
+        perform their computations asynchronously within each superstep, and only exchange data between supersteps. Specific actions that can be taken by a worker
+        within a superstep include:
+        \begin{itemize}
+          \item Receiving messages sent in the previous superstep.
+          \item Sending messages to be received in the next superstep.
+          \item Modifying vertex values or edges.
+          \item Deactivating a vertex, which is reactivated when it receives a message.
+        \end{itemize}
+
+        This distributed execution stops when all vertices are inactive and with no more messages to process.
+
+      \subsubsection{Initialization}
+        The master is responsible for assigning a section of the vertices to each worker. The default partitioner uses a simple hash function over vertices,
+        which generates a fairly even distribution of vertices. To take advantage of other properties of a graph (e.g. exploiting locality), the default
+        partitioning scheme can be overridden.
+
+      \subsubsection{Combiners and Aggregators}
+        Pregel supports combiners, which serve to reduce the amount of data exchanges over a network and the number of messages. Combiners are often applicable
+        when the function applied at each vertex is commutative and associative (e.g. sum, max).
+
+        Pregel also supports aggregators, which are used to compute aggregate statistics from vertex-reported values.
+
+      \subsubsection{Fault Tolerance}
+        At the end of each superstep, the master instructs workers to save their state (i.e. vertex values, edge values, incoming messages, aggregator values, etc.)
+        to persistent storage. When the master detects the failure of a worker node, it rolls back all workers to the last successful superstep, and the computations
+        resume. If deterministic replay of sent messages is possible, then there are some more efficient recovery mechanisms that only require that the failed worker
+        is rolled back to the last successful superstep.
+
+    \subsection{Open-source Implementations}
+      Pregel-like APIs are supported by various open-source frameworks such as Apache Giraph. Other APIs support centralized graph processing (e.g. GraphChi), which
+      tends to perform better for fairly small datasets that can fit in the main memory of a single machine.
+
 \end{document}
