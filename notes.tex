@@ -33,6 +33,8 @@
         \item \textbf{Professor:} Wojciech Golab
       \end{itemize}
 
+  \newpage
+
   \section{Introduction}
     \subsection{What is a Distributed System?}
       A distributed system is a collection of autonomous computing elements that appear to its users to be a single coherent system.
@@ -130,6 +132,8 @@
           processing to reduce communication costs.
         \end{itemize}
 
+  \newpage
+
   \section{Architectures}
     \subsection{Definitions}
       \begin{itemize}
@@ -164,6 +168,8 @@
 
     \subsection{Self-Management:}
       Self-managing systems can be constructed using a feedback loop that monitors system behaviors and adjusts the system's internal operation.
+
+  \newpage
 
   \section{Processes}
     \subsection{Controlling Processes in Linux}
@@ -202,6 +208,8 @@
     \subsection{Server Clusters}
       Servers in a cluster are often organized in three physical tiers. The first is a load balancer, followed by application servers followed by a database
       or file system.
+
+  \newpage
 
   \section{Communication}
     \subsection{Access Transparency}
@@ -257,6 +265,8 @@
       \subsubsection{Temporal Coupling}
         Temporal coupling means that processes must both be running for them to communicate (e.g. client cannot execute RPC if server is down).
 
+  \newpage
+
   \section{Apache Thrift}
     \subsection{Overview}
       Apache Thrift is an IDL first developed by Facebook, and now managed as an open-source project in the Apache Software Foundation. Thrift provides
@@ -294,6 +304,8 @@
         \item By default Thrift transports, protocols and client stubs are not thread safe; different threads should share these items carefully, or not share them
         at all.
       \end{itemize}
+
+  \newpage
 
   \section{Distributed File Systems}
 
@@ -333,6 +345,8 @@
 
       Semantics of DFS can be defined using combinations of various techniques. For example, NFSv4 supports session semantics and byte range file locking, and HDFS
       provides immutable files along with an append function (e.g. for storing log data).
+
+  \newpage
 
   \section{Hadoop MapReduce}
 
@@ -408,6 +422,8 @@
         return tuples with an item and a list of items it appears with tends to perform better despite requiring more memory for map-side aggregation, since there
         end up being roughly $N$ keys (one for each element) instead of $N^2$ (one for each pair).
 
+  \newpage
+
   \section{Apache Spark}
 
     \subsection{Background}
@@ -435,6 +451,8 @@
           when running multiple jobs in sequence.
         \item Spark can support some more complicated workflows within a single job rather than running several new ones.
       \end{itemize}
+
+  \newpage
 
   \section{Distributed Graph Processing}
     Many data sets (e.g. web hyperlinks, social networks, transportation routes) can be modeled using graphs. Computations concerning very large graphs can benefit
