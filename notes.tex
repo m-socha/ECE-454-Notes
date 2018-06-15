@@ -45,9 +45,9 @@
         \item Techniques for making distributed systems scalable and dependable, as well as the relevant trade-offs
         \item Remote procedure call (RPC) frameworks for implementing distributed services
         \item Scalable data processing frameworks for solving analytics problems
-        \item Fault-tolerant coordination services for configuration management, synchronization and failure-detection
+        \item Fault-tolerant coordination services for configuration management, synchronization, and failure-detection
           in distributed software systems
-        \item Stream-processing engine for real-time analytics
+        \item Stream-processing engines for real-time analytics
         \item Relative merits of distributed versus centralized systems
       \end{itemize}
 
@@ -58,6 +58,7 @@
       A distributed system is a collection of autonomous computing elements that appear to its users to be a single coherent system.
 
     \subsection{Rationale Behind Distributed Systems}
+      Distributed systems are often used for the following reasons:
       \begin{itemize}
         \item Resource sharing
         \item Integrating multiple systems
@@ -83,10 +84,10 @@
           \item Storage facilities (e.g. file servers)
           \item Enterprise data (e.g. payroll)
           \item Web page (e.g. Web search)
-          \item CPUs (e.g. Supercomputers)
+          \item CPUs (e.g. supercomputers)
         \end{itemize}
 
-      \subsubsection{Making distribution transparent}
+      \subsubsection{Making Distribution Transparent}
         Distribution transparency attempts to hide that processes and resources are physically distributed. Types of transparency include:
         \begin{itemize}
           \item \textbf{Access:} Hide differences in data representation and how data is accessed
@@ -120,8 +121,8 @@
         A few common scaling techniques include:
         \begin{itemize}
           \item Hiding communication latencies (i.e. trying to avoid waiting for responses from remote-server machines)
-          \item Partitioning (i.e. Taking a component, splitting it into smaller parts, and spreading those parts across the system)
-          \item Replication (i.e. Adding multiple copies of a component to increase availability, balance load, support caching, etc.)
+          \item Partitioning (i.e. taking a component, splitting it into smaller parts, and spreading those parts across the system)
+          \item Replication (i.e. adding multiple copies of a component to increase availability, balance load, support caching, etc.)
         \end{itemize}
 
       \subsection{Common Fallacies of Distributed Computing}
@@ -141,12 +142,12 @@
         \begin{itemize}
           \item \textbf{Web sites and Web services}
           \item \textbf{High performance computing (HPC):} High-performance computing in distributed memory settings, where message communication is used instead of shared memory.
-          \item \textbf{Clustered Computing:} Distributing CPU or I/O intensive tasks over multiple servers.
+          \item \textbf{Cluster Computing:} Distributing CPU or I/O intensive tasks over multiple servers.
           \item \textbf{Cloud and Grid Computing:} Grid computing focuses on combining resources from different institutions, while cloud computing provides access to shared pools
           of configurable system resources.
           \item \textbf{Transaction Processing:} Distributed transactions coordinated by transaction processing (TP) monitor.
           \item \textbf{Enterprise Application Integration (EAI):} Middleware often used as communication facilitator in such systems.
-          \item \textbf{Sensor Networks:} Each sensor in a network can process and store data, which can be queries by some operator. Sensors often rely on in-network data
+          \item \textbf{Sensor Networks:} Each sensor in a network can process and store data, which can be queried by some operator. Sensors often rely on in-network data
           processing to reduce communication costs.
         \end{itemize}
 
@@ -156,7 +157,7 @@
     \subsection{Definitions}
       \begin{itemize}
         \item \textbf{Component:} A modular unit with a well-defined interface
-        \item \textbf{Connector:} Mechanism that mediated communication, coordination, or cooperation among components
+        \item \textbf{Connector:} Mechanism that mediates communication, coordination, or cooperation among components
         \item \textbf{Software architecture:} Organization of software components
         \item \textbf{System architecture:} Instantiation of software architecture in which software components are placed on real machines
         \item \textbf{Autonomic System:} System that adapts to its environment by monitoring its own behavior and reacting accordingly
@@ -184,14 +185,14 @@
 
       In practice, many systems are hybrids of the architectures listed above.
 
-    \subsection{Self-Management:}
+    \subsection{Self-Management}
       Self-managing systems can be constructed using a feedback loop that monitors system behaviors and adjusts the system's internal operation.
 
   \newpage
 
   \section{Processes}
     \subsection{Controlling Processes in Linux}
-      Below are some useful command:
+      Below are some useful process-related commands:
       \begin{itemize}
         \item ps - lists running processes
         \item top - lists processes with top resource usage
@@ -209,13 +210,13 @@
       kernel space and back.
 
     \subsection{Threads}
-      Threads execution the same process can communicate through shared memory. Threads are sometimes referred to as lightweight processes (LWPs).
-      Multithreading applications often follow a dispatcher/worker design, where a dispatcher thread received requests and feeds them to a pool
+      Threads running in the same process can communicate through shared memory. Threads are sometimes referred to as lightweight processes (LWPs).
+      Multithreading applications often follow a dispatcher/worker design, where a dispatcher thread receives requests and feeds them to a pool
       of worker threads.
 
     \subsection{Hardware and Software Interfaces}
       Processes and threads may interact with underlying hardware either directly through processor instructions or indirectly through library functions
-      operating system calls. The general layers of interaction (from more abstract to less) are applications, libraries, operating system and hardware.
+      or operating system calls. The general layers of interaction (from more abstract to less) are applications, libraries, operating system, and hardware.
       These layers may interact with any layer below. Distributed systems often run in virtual environments that manage interactions with lower layers.
       A major benefit of such virtualization is improved portability. Virtual machine monitors can offer additional benefits, including server consolidation,
       live migration of VMs to support load balancing and proactive maintenance, and VM replication.
@@ -278,7 +279,7 @@
 
     \subsection{Coupling Between Communicating Processes}
       \subsubsection{Referential Coupling}
-        Referential coupling means that one process has to explicitly reference another one for them to communicate (e.g. connect to web server using IP
+        Referential coupling means that one process has to explicitly reference another one for them to communicate (e.g. connecting to web server using IP
         address and port number).
       \subsubsection{Temporal Coupling}
         Temporal coupling means that processes must both be running for them to communicate (e.g. client cannot execute RPC if server is down).
@@ -292,12 +293,12 @@
       Python, and PHP.
 
     \subsection{Thrift Software Stack}
-      The elements in the Thrift software stack, from top to bottom, as as follows:
+      The elements in the Thrift software stack, from top to bottom, are as follows:
       \begin{itemize}
         \item \textbf{Server:} Sets up the lower layers of the stack, and then awaits incoming connections, which it hands off to the processor. Servers
         can be single or multi-threaded.
         \item \textbf{Processor:} Handles reading and writing IO streams, and is generated by the Thrift compiler.
-        \item \textbf{Protocol:} Defined mechanism to map in-memory data structures to wire format (e.g. JSON, XML, compact binary)
+        \item \textbf{Protocol:} Defines mechanism to map in-memory data structures to wire format (e.g. JSON, XML, compact binary)
         \item \textbf{Transport:} Handles reading to and writing from network (e.g. using HTTP, raw TCP, etc)
       \end{itemize}
 
@@ -330,7 +331,7 @@
     \subsection{Modes of Access}
       \begin{itemize}
         \item \textbf{Remote access model:} Client sends requests to access file stored on remote server.
-        \item \textbf{Upload/download model:} File is downloaded from remote server, processes on client, and uploaded back to the server.
+        \item \textbf{Upload/download model:} File is downloaded from remote server, processed on client, and uploaded back to the server.
       \end{itemize}
 
     \subsection{Network File System (NFS)}
@@ -345,7 +346,7 @@
 
     \subsection{Google File System (GFS)}
       GFS is a DFS that stripes files across multiple commodity servers, and is layered on top of ordinary Linux file systems. Although GFS is proprietary, the
-      Hadoop Distributed File System is a simplified open-source implementation of GFS.
+      Hadoop Distributed File System (HDFS) is a simplified open-source implementation of GFS. Below are a few key properties of GFS:
       \begin{itemize}
         \item \textbf{Synchronization:} A GFS master stores data about files and chunks. This metadata is cached in the main memory of chunk servers, and updates to
         these chunks servers are written to their own main memory. The master periodically polls the chunk servers to keep this metadata consistent.
@@ -382,20 +383,20 @@
       \begin{itemize}
         \item Components do not share data arbitrarily, as the communication overhead for keeping data synchronized across nodes can be very high.
         \item Data elements are immutable. Computation occurs by generating new outputs, which can then be forwarded into the next computation phase.
-        \item MapReduce transforms lists of input data elements into lists of output data elements. A single MapReduce program typically does so twice, once for the
-        Map phase and once for the Reduce phase.
+        \item MapReduce transforms lists of input data elements into lists of output data elements. A single MapReduce program typically does so twice, once for a
+        Map phase and once for a Reduce phase.
       \end{itemize}
 
       \subsubsection{Mappers}
-        A list of data elements are provided to a mapper one-by-one, which transforms each element to some output element.
+        A list of data elements is provided to a mapper, which transforms each element to some output element.
 
       \subsubsection{Reducers}
-        A reducer receives an iterator of input values, and combined these values together to produce a single value.
+        A reducer receives an iterator of input values, and combines these values together to produce a single value.
 
     \subsection{Technical Definitions}
       \begin{itemize}
         \item \textbf{InputSplit:} A unit of work assigned to a single map task.
-        \item \textbf{InputFormat:} Determines how input files are parsed, which also determined the InputSplit.
+        \item \textbf{InputFormat:} Determines how input files are parsed, which also determines the InputSplit.
         \item \textbf{RecordReader:} Loads data from input split, creating key-value pairs used by the mapper.
         \item \textbf{Partitioner:} Determines which partition key-values pairs should go to.
         \item \textbf{OutputFormatter:} Determines how output files are formatted.
