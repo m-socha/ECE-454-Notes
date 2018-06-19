@@ -523,4 +523,63 @@
       Pregel-like APIs are supported by various open-source frameworks such as Apache Giraph. Other APIs support centralized graph processing (e.g. GraphChi), which
       tends to perform better for fairly small datasets that can fit in the main memory of a single machine.
 
+  \section{Consistency and Replication}
+
+    \subsection{Replication Overview}
+
+      \subsubsection{Purposes of Replication}
+        The main purposes behind data replication include:
+        \begin{itemize}
+          \item \textbf{Increasing reliability}, since data is more likely to be accessible if it exists on more replicas.
+          \item \textbf{Increasing throughput}, since replicas can serve read operations in parallel.
+          \item \textbf{Lowering latency}, since replicas physically close to clients can avoid costly round trips.
+        \end{itemize}
+
+      \subsubsection{Replicated Data Stores}
+        In replicated data stores, each data object is replicated across multiple hosts. Replicas may reside on the same host
+        as processes that interact with them, or may be remote.
+
+    \subsection{Consistency Models}
+      Consistency models describe the extent to which replicas can disagree on the current state of data. Managing consistency tends to
+      be straightforward for read-only data, but the need for sophisticated models arises once replicas hold mutable states, especially
+      ones shared among multiple processes. Selecting a good consistency model is often challenging, as application requirements
+      rarely map neatly to a specific model.
+
+      \subsubsection{Sequential Consistency}
+        Sequential consistency requires that:
+          \begin{enumerate}
+            \item The result of any execution is the same as if the operations by all processes on the data store were performed in some
+              sequential order.
+            \item The operations of each individual process appear in the order specified in its program.
+          \end{enumerate}
+        The notion of this consistency model is borrowed from shared memory multiprocessing.
+
+      \subsubsection{Causal Consistency}
+        The concept of causal consistency is also borrowed from shared memory multiprocessing, and is based on a notion of similarity similar
+        to Lamport's ``happens before'' model. A data store is casually consistent if writes related by some ``causally precedes'' operation
+        are seen by all processes in the same order. The ``causally precedes'' operator is defined as follows:
+          \begin{enumerate}
+            \item Op1 causally precedes Op2 if Op1 occurs before Op2 in the same process.
+            \item Op1 causally precedes Op2 if Op2 reads a value written by Op1.
+          \end{enumerate}
+
+      \subsubsection{Linearizability}
+        A data store is linearizable when the result of any execution is the same as if all operations on the data store were executed in some
+        sequential order that extends Lamport's ``happens before'' model. This means that if Op1 finishes before Op2 beings, then Op1 must precede
+        Op2 in sequential order.
+
+      \subsubsection{Eventual Consistency}
+        The idea behind eventual consistency is that if no updates take place for some time, all replicas will gradually become consistent.
+        Eventual consistency allows for different processes to observe write operations taking effect in different orders, even when the operations
+        are related by ``causally precedes'' or ``happens before''.
+
+        Eventual consistency is a very weak property on its own, and appears to guarantee very little if updates are applied continuously. To strengthen
+        these guarantees, session guarantees can be applied, which restrict the behavior of a single process in a single session. Examples of session
+        guarantees include:
+        \begin{itemize}
+          \item \textbf{Monotonic reads}, which means that if a process reads a particular value of a data item, then successive reads in that process will
+            return that value or a newer one.
+          \item \textbf{Read your own writes}, which means the effect of a write operation will always be seen in successive read operations by the same process.
+        \end{itemize}
+
 \end{document}
