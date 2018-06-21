@@ -582,4 +582,34 @@
           \item \textbf{Read your own writes}, which means the effect of a write operation will always be seen in successive read operations by the same process.
         \end{itemize}
 
+    \subsection{Replication Protocols}
+
+      \subsubsection{Primary-Based Replication Protocols}
+        Primary-based replication protocols involve updates being performed on a single primary replica, with updates then pushed to any backup replicas.
+        If a primary replica is stationary, where it may be often updated remotely by other servers, this protocol can be classified as remote-write. Alternatively,
+        local updates may be enabled by allowing the primary replica to migrate from server to server, in which case the protocol can be classified as local-write.
+
+        Primary-based replication protocols allow for some strong consistency models. However, a single primary replica can lead to performance bottlenecks and
+        availability problems.
+
+      \subsubsection{Quorum-Based Replication Protocols}
+        Quorum-based replication protocols allow all replicas to perform updates and to service reads. However, each update and read must be performed on a
+        sufficiently large subset of replicas, known as the write and read quorum respectively.
+
+        Let $N$ be the total number of replicas, $N_R$ be the read quorum, and $N_W$ be the write quorum. In a distributed database, the following two rules must
+        be satisfied:
+        \begin{enumerate}
+          \item $N_R + N_W > N$, which enables the detection of read-write conflicts.
+          \item $N_W + N_W > N$, which enables the detection of write-write conflicts.
+        \end{enumerate}
+
+        Subsets of replicas that do not satisfy the rules above are referred to as partial quorums. Alternate means must be found for resolving conflicts, such
+        as tagging updates with timestamps.
+
+      \subsubsection{Eventually-Consistent Replication Protocols}
+        In simple cases of eventual consistency, reads and updates are serviced by the closest replica. This replica lazily (i.e. async to original update) propagates
+        updates to other replicas. Replicas can go out of sync for various reasons, such as one being unreachable due to network failure. This is handled by what is
+        known as an anti-entropy mechanism. One sample anti-entropy mechanism is different replicas exchanging hash trees (also known as Merkle trees), which contain
+        hashes of blocks of data that can be used to find where two data sets differ.
+
 \end{document}
