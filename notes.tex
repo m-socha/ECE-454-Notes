@@ -614,4 +614,89 @@
         known as an anti-entropy mechanism. One sample anti-entropy mechanism is different replicas exchanging hash trees (also known as Merkle trees), which contain
         hashes of blocks of data that can be used to find where two data sets differ.
 
+  \newpage
+
+  \section{Fault Tolerance}
+
+    \subsection{Dependability}
+      Fault tolerance is closely related to the concept of dependability, which implies the following requirements:
+      \begin{itemize}
+        \item \textbf{Availability:} The system should operate correctly at a given instant in time (e.g. 99\% availability means a system operates
+          correctly 99\% of the time).
+        \item \textbf{Reliability:} The system should run continuously without interruption (e.g. mean time between failures (MTBF) of one month).
+        \item \textbf{Safety:} System failures should not have catastrophic consequences.
+        \item \textbf{Maintainability:} A failed system should be easy to repair.
+      \end{itemize}
+
+    \subsection{Failures}
+      A failure is occurring when a system cannot fulfill its promises. Five major types of failures of servers in distributed systems are:
+      \begin{itemize}
+        \item \textbf{Crash failure:} A server is working correctly and then halts.
+        \item \textbf{Omission failure:} A server fails to respond to requests or fails to receive or send messages.
+        \item \textbf{Timing failure:} A server's response falls outside of some specified time window.
+        \item \textbf{Response failure:} A server's response is incorrect.
+        \item \textbf{Arbitrary failure:} A server produces arbitrary failures at arbitrary times.
+      \end{itemize}
+
+    \subsection{Errors and Faults}
+      An error is a part of a system's state that may lead to failure (e.g. corrupt data read from hard disk). The fault is the underlying cause
+      of the error (e.g. hard disk head crashes). The main types of faults are:
+      \begin{itemize}
+        \item \textbf{Transient faults,} which emerge once and then disappear (e.g. birds flying in front of a microwave receiver)
+        \item \textbf{Intermittent faults,} which tend to reappear (e.g. loose contact on electrical connector)
+        \item \textbf{Permanent faults,} which continue to exist until some faulty component is replaced (e.g. burned out power supply)
+      \end{itemize}
+
+    \subsection{Masking Failure by Redundancy}
+      Triple-modular redundancy (or more generally, N-modular redundancy) is an approach to fault tolerance where multiple (3) subsystems perform the same process,
+      after which the result is determined by a majority voting system. Thus, the system can continue to function if some of its subsystems fail so long as the
+      remaining systems can win a majority vote. To support voting, processes must be able to communicate with one another. This communication can be setup as
+      a flat group (i.e. complete graph between all processes) or in some sort of hierarchical structure with a coordinator process and one or more worker processes.
+
+    \subsection{Consensus Problem}
+      The consensus problem in distributed computing can be defined as follows:
+      \begin{itemize}
+        \item Each process has procedures propose(val) and decide()
+        \item Each process first proposes a value by calling propose(val) once
+        \item Each process learns the value agreed upon by calling decide()
+      \end{itemize}
+
+      The following properties must hold:
+      \begin{itemize}
+        \item \textbf{Agreement:} Two calls to decide() cannot return different values.
+        \item \textbf{Validity:} If decide() returns a value val, then some process called propose(val).
+        \item \textbf{Liveness:} Calls to decide() and propose(val), if a process does not fail, must eventually terminate.
+      \end{itemize}
+
+      \subsubsection{Variations}
+        The solvability of the consensus problem depends on several factors of a distributed environment:
+        \begin{itemize}
+          \item Whether processes are synchronous or asynchronous to one another
+          \item Communication delays between processes
+          \item Message delivery order
+          \item Whether messages are unicast (one-to-one) or multicast (one-to-many)
+        \end{itemize}
+
+    \subsection{RPC Semantics Under Failures}
+      RPC systems may exhibit the following failure scenarios, which depend on when a failure occurs in an RPC call:
+      \begin{itemize}
+        \item Client unable to locate server.
+        \item Request message from client to server is lost.
+        \item Server crashes after receiving request.
+        \item Reply message from server to client is lost.
+        \item Client crashes after sending request.
+      \end{itemize}
+
+      \subsubsection{Dealing with RPC Server Crashes}
+        When the server crashes after receiving a request, the client may not know whether the server crashed
+        before or after executing the request. Techniques for dealing with such RPC server crashes include:
+        \begin{itemize}
+          \item Reissue the request, leading to at-least-once semantics, which are safe as long as the request is idempotent
+            (i.e. repeated executions have the same effect as one execution).
+          \item Not reissue the request and report a failure, leading to at-most-once semantics, with no guarantee that the
+            request was processed.
+          \item Determine whether the request was processed, and if it was not, reissue the request. This leads to exactly-once
+            semantics, which may be difficult to implement as there may be no clear way of knowing what action was performed.
+        \end{itemize}
+
 \end{document}
