@@ -648,10 +648,10 @@
       \end{itemize}
 
     \subsection{Masking Failure by Redundancy}
-      Triple-modular redundancy (or more generally, N-modular redundancy) is an approach to fault tolerance where multiple (3) subsystems perform the same process,
+      Triple-modular redundancy (or more generally, N-modular redundancy) is an approach to fault tolerance where multiple (3 or N) subsystems perform the same process,
       after which the result is determined by a majority voting system. Thus, the system can continue to function if some of its subsystems fail so long as the
       remaining systems can win a majority vote. To support voting, processes must be able to communicate with one another. This communication can be setup as
-      a flat group (i.e. complete graph between all processes) or in some sort of hierarchical structure with a coordinator process and one or more worker processes.
+      a flat group (i.e. complete graph between all processes) or in some sort of hierarchical structure with a coordinator process and multiple worker processes.
 
     \subsection{Consensus Problem}
       The consensus problem in distributed computing can be defined as follows:
@@ -669,7 +669,7 @@
       \end{itemize}
 
       \subsubsection{Variations}
-        The solvability of the consensus problem depends on several factors of a distributed environment:
+        The solvability of the consensus problem depends on several factors of a distributed environment, including:
         \begin{itemize}
           \item Whether processes are synchronous or asynchronous to one another
           \item Communication delays between processes
@@ -691,11 +691,11 @@
         When the server crashes after receiving a request, the client may not know whether the server crashed
         before or after executing the request. Techniques for dealing with such RPC server crashes include:
         \begin{itemize}
-          \item Reissue the request, leading to at-least-once semantics, which are safe as long as the request is idempotent
+          \item Reissuing the request, leading to at-least-once semantics, which are safe as long as the request is idempotent
             (i.e. repeated executions have the same effect as one execution).
-          \item Not reissue the request and report a failure, leading to at-most-once semantics, with no guarantee that the
+          \item Not reissuing the request and reporting a failure, leading to at-most-once semantics, with no guarantee that the
             request was processed.
-          \item Determine whether the request was processed, and if it was not, reissue the request. This leads to exactly-once
+          \item Determining whether the request was processed, and if it was not, reissuing the request. This leads to exactly-once
             semantics, which may be difficult to implement as there may be no clear way of knowing what action was performed.
         \end{itemize}
 
