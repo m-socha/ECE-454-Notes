@@ -699,4 +699,33 @@
             semantics, which may be difficult to implement as there may be no clear way of knowing what action was performed.
         \end{itemize}
 
+  \newpage
+
+  \section{Apache ZooKeeper}
+    ZooKeeper is a centralized system that manages distributed systems as a hierarchical key-value store. Common uses of ZooKeeper
+    include maintaining configuration information, providing distributed synchronization, and managing naming registries for distributed
+    systems. ZooKeeper emphasizes good performance (particularly for read-dominant workloads), being general enough to be used for many
+    different purposes, reliability, and ease of use.
+
+    \subsection{Data Model}
+      ZooKeeper's data model is a hierarchical key-value store similar to a file system. Nodes in this store are called znodes, and may
+      contain data and children. Reads and writes to a single node are considered to be atomic, with values read or written fully or not
+      at all.
+
+    \subsection{Node Types}
+      Two major types of nodes are:
+      \begin{itemize}
+        \item \textbf{Ephemeral nodes}, which exist as long as the session that created them is active, unless they were explicitly deleted.
+        \item \textbf{Sequence nodes}, which append a monotonically increasing counter to the end of their path.
+      \end{itemize}
+
+    \subsection{Consistency Model}
+      ZooKeeper ensures that writes are linearizable and that reads are serializable (a similar property to sequential consistency).
+      ZooKeeper also guarantees per-client FIFO servicing of requests.
+
+    \subsection{Servers}
+      When running in replicated mode, all servers have a copy of the state in memory. A leader is elected at startup, and all updates go
+      through this leader. Update responses are sent once a majority of servers have persisted the change. Thus, in order to tolerate $n$
+      failures, $2n + 1$ replicated servers are required.
+
 \end{document}
