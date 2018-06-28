@@ -712,11 +712,11 @@
       contain data and children. Reads and writes to a single node are considered to be atomic, with values read or written fully or not
       at all.
 
-    \subsection{Node Types}
-      Two major types of nodes are:
+    \subsection{Node Flags}
+      Two important flags nodes can carry are:
       \begin{itemize}
-        \item \textbf{Ephemeral nodes}, which exist as long as the session that created them is active, unless they were explicitly deleted.
-        \item \textbf{Sequence nodes}, which append a monotonically increasing counter to the end of their path.
+        \item \textbf{Ephemeral flags}, which make nodes exist as long as the session that created them is active, unless they were explicitly deleted.
+        \item \textbf{Sequence flags}, which make nodes append a monotonically increasing counter to the end of their path.
       \end{itemize}
 
     \subsection{Consistency Model}
