@@ -728,4 +728,47 @@
       through this leader. Update responses are sent once a majority of servers have persisted the change. Thus, in order to tolerate $n$
       failures, $2n + 1$ replicated servers are required.
 
+  \newpage
+
+  \section{Distributed Commits and Checkpoints}
+
+    \subsection{Transactions}
+      Transactions are indivisible operations with the following properties:
+      \begin{itemize}
+        \item \textbf{Atomic:} An operation occurs fully or not at all. This can be hard to achieve in distributed environments.
+        \item \textbf{Consistent:} A transaction is a valid transformation of the state.
+        \item \textbf{Isolated:} A transaction is not aware of other concurrent transactions.
+        \item \textbf{Durable:} Once a transaction completes, its updates persist, even in the event of failure.
+      \end{itemize}
+
+    \subsection{Two-Phase Commits}
+      The two-phase commit (2PC) is a distributed transaction commitment protocol. Systems running this protocol consist of a coordinator
+      and participants.
+
+      In the first phase, the coordinator asks participants whether they are ready to commit. These participants respond by voting. In the
+      second phase, the coordinator analyzes the participant votes. If all participants voted to commit, the commit proceeds. Otherwise, the
+      transaction is aborted.
+
+      The 2PC procedure described above makes a few key assumptions, including that processes are synchronous and that communication delays are bounded.
+
+      \subsubsection{Recovery from Failures}
+        Participants are able to make progress so long as they have received a decision. This decision is typically received from the coordinator, though
+        in the case of a coordinator crash, may be received from another participant.
+
+        The protocol described above blocks when all participants are waiting for an answer and the coordinator crashes, though some more complicated
+        implementations can overcome this. However, even in these more complicated implementations, the simultaneous failure of the coordinator and
+        some participants can make it difficult to detect whether all participants are ready for an answer.
+
+      \subsubsection{Distributed Checkpoints}
+        Recovery after failure is only possible if the collection of checkpoints by individual processes forms what is called a distributed snapshot. A
+        distributed snapshot requires that process checkpoints (i.e. representations of state at a certain point) contain a corresponding send event for
+        each message received. The most recent distributed snapshot is called the recovery line.
+
+        Coordinated checkpointing algorithms can be applied to create recovery lines. A sample two phase checkpointing algorithm works as follows:
+        \begin{enumerate}
+          \item The coordinator sends a checkpoint request message to all participant processes. When a participant receives the message, it pauses processing
+            of incoming messages, forms a checkpoint, and returns an acknowledgment (ACK) to the coordinator.
+          \item Once all ACKs are received by the coordinator, it sends a message to the participants that they can resume processing incoming messages.
+        \end{enumerate}
+
 \end{document}
