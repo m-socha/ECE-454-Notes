@@ -771,4 +771,47 @@
           \item Once all ACKs are received by the coordinator, it sends a message to the participants that they can resume processing incoming messages.
         \end{enumerate}
 
+  \newpage
+
+  \section{Apache Kafka}
+    Apache Kafka is an open-source distributed stream-processing platform. A few key features of Kafka are publish-subscribe message oriented communication,
+    real-time stream processing and distributed and replicated storage of these messages and streams. Common use cases for Kafka include:
+    \begin{itemize}
+      \item High-throughput messaging
+      \item Activity tracking
+      \item Metric collection
+      \item Log aggregation
+    \end{itemize}
+
+    \subsection{Topics and Logs}
+      A topic is a stream of records. Each topic can have multiple partitions, which allow a topic to be parallelized by splitting its data among multiple
+      Kafka brokers (i.e. servers), which in turn can have multiple replicas. Each record in a partition has a unique offset.
+
+    \subsection{Producers and Consumers}
+      Producers push records to Kafka brokers for a specific partition. These pushes can be batched (i.e. multiple records delivered in one operation), and
+      idempotent delivery is supported (i.e. duplicate commits can be prevented).
+
+      Consumers pull batches of records from Kafka brokers. Each consumer has a position within a partition, which can be updated once the records
+      are processed.
+
+    \subsection{Stream Semantics}
+      The main two ways of interpreting streams are:
+      \begin{itemize}
+        \item \textbf{Record streams}, where each record represents a single event (e.g. a single purchase).
+        \item \textbf{Changelog streams}, where each record represents an update to a state (e.g. a bank account balance change).
+      \end{itemize}
+
+      Kafka provides different APIs for interacting with the different types of streams. The KStream API is used to interact with record streams, while
+      the KTable API is used to interact with changelog streams. The KGroupedStream API can be used when converting from a KStream to a KTable.
+
+    \subsection{Windowed Streams}
+      Windowing allows for grouping records close in time. A few common types of windows include:
+      \begin{itemize}
+        \item \textbf{Hopping time windows}, which are defined by a size and advance interval (hop). An example is to compute something every 10 seconds (hop)
+          for the last 60 seconds of data (size).
+        \item \textbf{Tumbling time windows}, which are special non-overlapping versions of hopping time windows (i.e. the hop and size are equal).
+        \item \textbf{Sliding windows}, which slide continuously over the time axis.
+        \item \textbf{Session windows}, which aggregate data by activity periods (i.e. new windows are created once a period of inactivity exceeds a certain length).
+      \end{itemize}
+
 \end{document}
