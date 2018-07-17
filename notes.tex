@@ -814,4 +814,81 @@
         \item \textbf{Session windows}, which aggregate data by activity periods (i.e. new windows are created once a period of inactivity exceeds a certain length).
       \end{itemize}
 
+  \newpage
+
+  \section{Clock Synchronization}
+    Clocks are instruments used to measure time. A lack of synchronization among clocks in a distributed system can result in unclear ordering of events.
+
+    \subsection{Background on Clocks}
+
+      \subsubsection{Calendars}
+        A few significant calendars used historically include:
+        \begin{itemize}
+          \item \textbf{Roman Calendar:} The Roman calendar is a lunar calendar (i.e. based on moon phases) with months of 29 or 30 days. The original Roman
+            calendar had only 10 months, with winter days unallocated. Reforms such as adding two extra months were later introduced, but the calendar remained
+            difficult to align with seasons, since it is a lunar calendar.
+          \item \textbf{Julian Calendar:} The Julian calendar was the first solar calendar (i.e. based on the Earth's movement around the sun). Introduced in
+            45 BC, the calendar improved on the Roman calendar, such as by adding the concept of a leap year (but not very accurately).
+          \item \textbf{Gregorian Calendar:} The Gregorian calendar is the most widely used calendar in the world. Introduced in 1582, its main improvement
+            over the Julian calendar is measuring leap years far more accurately (accurate to 1 day in 7700 years).
+        \end{itemize}
+
+      \subsubsection{Timekeeping Standards}
+        A few standards used for timekeeping include:
+        \begin{itemize}
+          \item \textbf{Solar day:} The interval between two consecutive transits of the sun (i.e. sun reaching highest point of the day). This is not constant.
+          \item \textbf{TAI (Temps Atomique International):} International time scale based on the average of multiple Cesium 133 atomic clocks.
+          \item \textbf{UTC (Coordinated Universal Time):} The world's primary time standard. Based on TAI, UTC uses leap seconds at irregular intervals to
+              compensate for the Earth's slowing rotation. As a result, UTC is currently tens of seconds behind TAI.
+        \end{itemize}
+
+      \subsubsection{Limitations of Atomic Clocks}
+        Atomic clocks are the most accurate timekeeping devices known, but are limited by relativistic time dilation. This was confirmed by the Hafele-Keating
+        experiment, in which atomic clocks were flown around the world and compared to stationary ones.
+
+    \subsection{Terminology}
+      Let $C(t)$ denote the value of a clock $C$ at a reference time (e.g. UTC) $t$.
+        \begin{itemize}
+          \item \textbf{Clock skew} of $C$ relative to $t$ is $\frac{dC}{dt} - 1$.
+          \item \textbf{Offset} of $C$ relative to $t$ is $C(t) - t$.
+          \item \textbf{Maximum drift rate} of $C$ is a constant $\rho$ such that $1 - \rho \leq \frac{dC}{dt} \leq 1 + \rho$.
+        \end{itemize}
+
+    \subsection{Network Time Protocol (NTP)}
+      NTP is a common time synchronization protocol for computers over variable-latency data networks.
+
+      Consider two hosts (A and B). Host A sends a request at $T_1$ to host B. Host B receives this request at $T_2$. Host B replies at $T_3$, and host $A$
+      receives this reply at $T_4$. The offset of B relative to A is $\theta = \frac{(T_2 - T_1) + (T_3 - T_4)}{2}$. The estimated one-way network delay is
+      $\delta = \frac{(T_4 - T_1) - (T_3 - T_2)}{2}$. NTP typically collects multiple $(\theta, \delta)$ pairs and uses the minimum value of $\delta$ as the
+      best estimation of the delay. The corresponding $\theta$ is considered to be the most reliable estimate of the offset.
+
+      \subsubsection{Clock Strata}
+        A reference clock, such as an atomic clock, is said to operate at stratum 0. A computer at stratum 1 has its time controlled by a stratum 0 device, a
+        computer at stratum 2 has its time controlled by a stratum 1 device, and so forth. Computers may only adjust the time of computers at greater strata, and
+        when adjusting, must make sure time does not appear to flow backwards.
+
+      \subsubsection{Precision}
+        NTP accuracy is typically measured in 10s of milliseconds. Some other protocols, such as Precision Time Protocol (PTP), can be used to achieve
+        sub-millisecond accuracy where NTP does not suffice.
+
+    \subsection{Logical Clocks}
+      Logical clocks are not concerned with the precise timing of events, but instead make sure that the time at each process follows a ``happens before''
+      relation (e.g. a message cannot be received before it is sent).
+
+      \subsubsection{Lamport Timestamping}
+        Lamport timestamping is a technique to enforce the ``happens before'' relation described above. The algorithm is:
+        \begin{itemize}
+          \item Before executing an event (send or receive), a process increments a counter.
+          \item Sent messages are tagged with the sender's timestamp.
+          \item Upon receiving a message, a process sets its counter to be the max of its current counter and the received counter (and increments the result).
+        \end{itemize}
+
+      \subsubsection{Vector Clocks}
+        Vector clocks represent logical time similar to Lamport timestamping. However, instead of a single counter, each clock stores a vector of a counter at each
+        process. Vector changes are similar to those of Lamport timestamping, but applied to a single entry in the vector instead of a process-wide counter.
+
+        Lamport timestamping guarantees that if an event $a$ happened before $b$, then the clock at a process that handled both $a$ and $b$ is smaller for $a$.
+        However, the reverse of the relationship does not hold for Lamport timestamping (i.e. a lesser time at $a$ than $b$ does not imply that $a$ happened
+        before $b$. Vector clocks guarantee the reverse as well, so they are said to provide a complete characterization of causality.
+
 \end{document}
