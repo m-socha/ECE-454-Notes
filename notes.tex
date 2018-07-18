@@ -891,4 +891,40 @@
         However, the reverse of the relationship does not hold for Lamport timestamping (i.e. a lesser time at $a$ than $b$ does not imply that $a$ happened
         before $b$. Vector clocks guarantee the reverse as well, so they are said to provide a complete characterization of causality.
 
+  \newpage
+
+  \section{CAP Principle}
+    The CAP theorem, also known as Brewer's theorem, states that it is impossible for a distributed system to provide all three of:
+    \begin{itemize}
+      \item \textbf{Consistency}, which means that nodes in a system agree on the most recent state of data.
+      \item \textbf{Availability}, which means that nodes are able to execute read-only queries and updates.
+      \item \textbf{Partition tolerance}, which means that the system continues to function if its servers are separated into disjoint sets (e.g. because of a network
+        failure).
+    \end{itemize}
+
+    \subsection{CP vs AP Systems}
+      CAP can be interpreted as that when a network partition occurs, systems need to choose between consistency (C) and availability (A). CP systems select
+      consistency over availability, while AP systems select availability over consistency. AP systems are appropriate for many applications that are
+      latency-sensitive, inconsistency-tolerant, and do not rely on transactions.
+
+      CP systems are able to enforce stronger consistency models (e.g. serializability, linearizability) than AP systems, which may strive for eventual or
+      causal consistency.
+
+    \subsection{PACELC}
+      PACELC is an extension of the CAP theorem that states that:
+      \begin{itemize}
+        \item If there is a \textbf{P}artition, a choice must be made between \textbf{A}vailability and \textbf{C}onsistency.
+        \item \textbf{E}lse, a choice must be made between (lower) \textbf{L}atency and \textbf{C}onsistency.
+      \end{itemize}
+
+    \subsection{Quorum-Based Consistency and CAP}
+      Systems that ensures every read observes the effects of all writes that completed before the read started, such as through using quorums, are said to
+      have strong consistency. This type of consistency is considered to be ``C'' in the context of the CAP theorem.
+
+      Some systems allow consistency settings to be determined on a per-request basis (e.g. one, quorum, all). These systems are said to have tunable consistency.
+
+      In general, systems where a read or write must occur at specific machines are not available. One solution to this is using sloppy quorums, in which a set
+      of replicas can change dynamically, such as to adjust to network partitions. This is used in database systems with hinted handoff, where an arbitrary node
+      can accept an update; if that update should ideally go to a different node, the update will be transferred to that node once the network partition is removed.
+
 \end{document}
