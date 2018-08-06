@@ -2,6 +2,9 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{parskip}
 
+\let\stdsection\section
+\renewcommand\section{\clearpage\stdsection}
+
 \usepackage{hyperref}
 \hypersetup{
   linktoc=all
@@ -50,8 +53,6 @@
         \item Stream-processing engines for real-time analytics
         \item Relative merits of distributed versus centralized systems
       \end{itemize}
-
-  \newpage
 
   \section{Introduction}
     \subsection{What is a Distributed System?}
@@ -151,8 +152,6 @@
           processing to reduce communication costs.
         \end{itemize}
 
-  \newpage
-
   \section{Architectures}
     \subsection{Definitions}
       \begin{itemize}
@@ -187,8 +186,6 @@
 
     \subsection{Self-Management}
       Self-managing systems can be constructed using a feedback loop that monitors system behaviors and adjusts the system's internal operation.
-
-  \newpage
 
   \section{Processes}
     \subsection{Controlling Processes in Linux}
@@ -227,8 +224,6 @@
     \subsection{Server Clusters}
       Servers in a cluster are often organized in three physical tiers. The first is a load balancer, followed by application servers followed by a database
       or file system.
-
-  \newpage
 
   \section{Communication}
     \subsection{Access Transparency}
@@ -284,8 +279,6 @@
       \subsubsection{Temporal Coupling}
         Temporal coupling means that processes must both be running for them to communicate (e.g. client cannot execute RPC if server is down).
 
-  \newpage
-
   \section{Apache Thrift}
     \subsection{Overview}
       Apache Thrift is an IDL first developed by Facebook, and now managed as an open-source project in the Apache Software Foundation. Thrift provides
@@ -323,8 +316,6 @@
         \item By default Thrift transports, protocols and client stubs are not thread safe; different threads should share these items carefully, or not share them
         at all.
       \end{itemize}
-
-  \newpage
 
   \section{Distributed File Systems}
 
@@ -364,8 +355,6 @@
 
       Semantics of DFS can be defined using combinations of various techniques. For example, NFSv4 supports session semantics and byte range file locking, and HDFS
       provides immutable files along with an append function (e.g. for storing log data).
-
-  \newpage
 
   \section{Hadoop MapReduce}
 
@@ -441,8 +430,6 @@
         return tuples with an item and a list of items it appears with tends to perform better despite requiring more memory for map-side aggregation, since there
         end up being roughly $N$ keys (one for each element) instead of $N^2$ (one for each pair).
 
-  \newpage
-
   \section{Apache Spark}
 
     \subsection{Background}
@@ -470,8 +457,6 @@
           when running multiple jobs in sequence.
         \item Spark can support some more complicated workflows within a single job rather than running several new ones.
       \end{itemize}
-
-  \newpage
 
   \section{Distributed Graph Processing}
     Many data sets (e.g. web hyperlinks, social networks, transportation routes) can be modeled using graphs. Computations concerning very large graphs can benefit
@@ -522,8 +507,6 @@
     \subsection{Open-source Implementations}
       Pregel-like APIs are supported by various open-source frameworks such as Apache Giraph. Other APIs support centralized graph processing (e.g. GraphChi), which
       tends to perform better for fairly small datasets that can fit in the main memory of a single machine.
-
-  \newpage
 
   \section{Consistency and Replication}
 
@@ -614,8 +597,6 @@
         known as an anti-entropy mechanism. One sample anti-entropy mechanism is different replicas exchanging hash trees (also known as Merkle trees), which contain
         hashes of blocks of data that can be used to find where two data sets differ.
 
-  \newpage
-
   \section{Fault Tolerance}
 
     \subsection{Dependability}
@@ -699,8 +680,6 @@
             semantics, which may be difficult to implement as there may be no clear way of knowing what action was performed.
         \end{itemize}
 
-  \newpage
-
   \section{Apache ZooKeeper}
     ZooKeeper is a centralized system that manages distributed systems as a hierarchical key-value store. Common uses of ZooKeeper
     include maintaining configuration information, providing distributed synchronization, and managing naming registries for distributed
@@ -727,8 +706,6 @@
       When running in replicated mode, all servers have a copy of the state in memory. A leader is elected at startup, and all updates go
       through this leader. Update responses are sent once a majority of servers have persisted the change. Thus, in order to tolerate $n$
       failures, $2n + 1$ replicated servers are required.
-
-  \newpage
 
   \section{Distributed Commits and Checkpoints}
 
@@ -771,8 +748,6 @@
           \item Once all ACKs are received by the coordinator, it sends a message to the participants that they can resume processing incoming messages.
         \end{enumerate}
 
-  \newpage
-
   \section{Apache Kafka}
     Apache Kafka is an open-source distributed stream-processing platform. A few key features of Kafka are publish-subscribe message oriented communication,
     real-time stream processing and distributed and replicated storage of these messages and streams. Common use cases for Kafka include:
@@ -813,8 +788,6 @@
         \item \textbf{Sliding windows}, which slide continuously over the time axis.
         \item \textbf{Session windows}, which aggregate data by activity periods (i.e. new windows are created once a period of inactivity exceeds a certain length).
       \end{itemize}
-
-  \newpage
 
   \section{Clock Synchronization}
     Clocks are instruments used to measure time. A lack of synchronization among clocks in a distributed system can result in unclear ordering of events.
@@ -890,8 +863,6 @@
         Lamport timestamping guarantees that if an event $a$ happened before $b$, then the clock at a process that handled both $a$ and $b$ is smaller for $a$.
         However, the reverse of the relationship does not hold for Lamport timestamping (i.e. a lesser time at $a$ than $b$ does not imply that $a$ happened
         before $b$. Vector clocks guarantee the reverse as well, so they are said to provide a complete characterization of causality.
-
-  \newpage
 
   \section{CAP Principle}
     The CAP theorem, also known as Brewer's theorem, states that it is impossible for a distributed system to provide all three of:
